@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Web</title>
+    <%- include('partials/head.html')%>
+</head>
+
+<body>
+
+    <%- include('partials/navigation.html') %>
+
+    <div class="container">
+        <h1>Piedra Papel Ó Tijera</h1>
+
+        <div id="result">
+    
+            <img id="machine-img" src="img/rock.svg">
+
+            <div id="start-text">
+                Selecciona una opción para empezar
+            </div>
+
+            <img id="user-img" src="img/rock.svg">
+
+        </div>
+
+        <div id="group-btn">
+            <button id="rock" type="button">
+                <img src="img/rock.svg"/>
+            </button>
+            <button id="paper" type="button">
+                <img src="img/paper.svg"/>
+            </button>
+            <button id="scissors" type="button">
+                <img src="img/scissors.svg"/>
+            </button>
+        </div>
+        <script src="/app.js"></script>
+
+        <script type="text/javascript" >
+            const ROCK = "rock";
+const PAPER = "paper";
+const SCISSORS = "scissors";
+
+const TIE = 0;
+const WIN = 1;
+const LOST = 2;
+
+let isPlaying = false;
+
+const rockBtn = document.getElementById("rock");
+const paperBtn = document.getElementById("paper");
+const scissorsBtn = document.getElementById("scissors");
+const resultText = document.getElementById("start-text");
+const userImg = document.getElementById("user-img");
+const machineImg = document.getElementById("machine-img");
+
+rockBtn.addEventListener("click", () => {
+    play(ROCK);
+});
+paperBtn.addEventListener("click", () => {
+    play(PAPER);
+});
+scissorsBtn.addEventListener("click", () => {
+    play(SCISSORS);
+});
+
+function play(userOption) {
+    if(isPlaying) return;
+
+    isPlaying = true;
+
+    userImg.src = "img/" + userOption + ".svg";
+
+    resultText.innerHTML = "Chossing!";
+
+    const interval = setInterval(function(){
+        const machineOption = calcMachineOption();
+        machineImg.src = "img/" + machineOption + ".svg";
+    }, 000);
+
+    setTimeout(function () {
+
+        clearInterval(interval);
+
+        const machineOption = calcMachineOption();
+        const result = calcResult(userOption, machineOption);
+
+        machineImg.src = "img/" + machineOption + ".svg";
+
+        switch (result) {
+            case TIE:
+                resultText.innerHTML = "Has empatado!";
+                break;
+            case WIN:
+                resultText.innerHTML = "Has ganado!";
+                break;
+            case LOST:
+                resultText.innerHTML = "Has perdido!";
+                break;
+        }
+        isPlaying = false;
+    }, );
+}
+
+function calcMachineOption() {
+    const number = Math.floor(Math.random() * 3);
+    switch (number) {
+        case 0:
+            return ROCK;
+        case 1:
+            return PAPER;
+        case 2:
+            return SCISSORS;
+    }
+}
+
+function calcResult(userOption, machineOption) {
+    if (userOption === machineOption) {
+        return TIE;
+
+    } else if (userOption === ROCK) {
+
+        if (machineOption === PAPER) return LOST;
+        if (machineOption === SCISSORS) return WIN;
+
+    } else if (userOption === PAPER) {
+
+        if (machineOption === SCISSORS) return LOST;
+        if (machineOption === ROCK) return WIN;
+
+    } else if (userOption === SCISSORS) {
+
+        if (machineOption === ROCK) return LOST;
+        if (machineOption === PAPER) return WIN;
+
+    }
+}
+        </script>
+    <!--Section One-->
+    <div class="container-fluid" id="about">
+        <div class="row bg-dark text-white p-5 text-center">
+            <div class="col-sm-6">
+                <i class="fa-solid fa-screwdriver-wrench fa-7x"></i>
+            </div>
+            <div class="col-sm-6">
+                <h3>Está en proceso de desarrollo o creación.</h3>
+                <p>Esta página se encuentra actualmente en desarrollo con Nodejs, ejs y Bootstrap</p>
+            </div>
+        </div>
+    </div>
+    
+    <%- include('partials/footer.html') %>
+</body>
+
+</html>
